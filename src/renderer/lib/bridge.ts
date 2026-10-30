@@ -131,6 +131,10 @@ class UnavailableBridge implements GpuPmApi {
     get: async () => this.fail<never>(),
     update: async () => this.fail<never>(),
   };
+
+  readonly clipboard = {
+    writeText: async () => this.fail<boolean>(),
+  };
 }
 
 /** Resolve the bridge to use for the whole session. */

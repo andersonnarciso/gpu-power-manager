@@ -171,6 +171,16 @@ export interface GpuPmApi {
     get(): Promise<AppSettings>;
     update(patch: Partial<AppSettings>): Promise<AppSettings>;
   };
+  clipboard: {
+    /**
+     * Copies text through the clipboard of the main process.
+     *
+     * The renderer cannot do this reliably on its own: the web clipboard API
+     * needs a permission that Electron denies by default and needs a focused
+     * document. Resolves to `false` when the text did not reach the clipboard.
+     */
+    writeText(text: string): Promise<boolean>;
+  };
 }
 
 /** Re-exported so the renderer can type its bridge shim. */

@@ -57,6 +57,9 @@ export const IPC = {
   /* settings */
   settingsGet: 'settings:get',
   settingsUpdate: 'settings:update',
+
+  /* clipboard */
+  clipboardWriteText: 'clipboard:write-text',
 } as const;
 
 export type IpcChannel = (typeof IPC)[keyof typeof IPC];

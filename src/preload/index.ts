@@ -95,6 +95,18 @@ const api: GpuPmApi = {
     get: () => ipcRenderer.invoke(IPC.settingsGet),
     update: (patch) => ipcRenderer.invoke(IPC.settingsUpdate, patch),
   },
+
+  clipboard: {
+    /**
+     * The IPC layer answers with `{ error }` instead of rejecting, so the
+     * result is checked here: only `true` means the text reached the
+     * clipboard.
+     */
+    writeText: async (text: string): Promise<boolean> => {
+      const result = await ipcRenderer.invoke(IPC.clipboardWriteText, text);
+      return result === true;
+    },
+  },
 };
 
 contextBridge.exposeInMainWorld('gpuPm', api);

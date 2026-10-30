@@ -168,12 +168,30 @@ export function Header(): React.JSX.Element {
             </DropdownMenuContent>
           </DropdownMenu>
 
-          <Button variant="ghost" size="icon-sm" onClick={toggleLocale} aria-label={t('header.toggleLanguage')}>
-            <Languages className="h-4 w-4" aria-hidden="true" />
-            <span className="ml-1 text-[10px] font-semibold uppercase">
-              {settings.locale === 'pt-BR' ? 'PT' : 'EN'}
-            </span>
-          </Button>
+          {/*
+            The language toggle carries a label, so it cannot use the square
+            `icon-sm` size: the text overflowed the fixed 32px box and spilled
+            outside the button, close to the edge of the window.
+          */}
+          <Tooltip>
+            <TooltipTrigger asChild>
+              <Button
+                variant="ghost"
+                size="sm"
+                className="h-8 gap-1.5 px-2 text-muted-foreground"
+                onClick={toggleLocale}
+                aria-label={t('header.toggleLanguage')}
+              >
+                <Languages className="h-4 w-4" aria-hidden="true" />
+                <span className="text-[10px] font-semibold uppercase tracking-wide">
+                  {settings.locale === 'pt-BR' ? 'PT' : 'EN'}
+                </span>
+              </Button>
+            </TooltipTrigger>
+            <TooltipContent>
+              {settings.locale === 'pt-BR' ? t('header.languageEn') : t('header.languagePt')}
+            </TooltipContent>
+          </Tooltip>
         </div>
       </header>
     </TooltipProvider>

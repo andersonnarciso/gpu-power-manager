@@ -55,6 +55,25 @@ Object.defineProperty(window, 'ResizeObserver', {
   value: FakeResizeObserver,
 });
 
+/** jsdom does not implement `matchMedia`, which the theme store needs. */
+if (typeof window.matchMedia !== 'function') {
+  Object.defineProperty(window, 'matchMedia', {
+    writable: true,
+    configurable: true,
+    value: (query: string): MediaQueryList =>
+      ({
+        matches: false,
+        media: query,
+        onchange: null,
+        addListener: () => undefined,
+        removeListener: () => undefined,
+        addEventListener: () => undefined,
+        removeEventListener: () => undefined,
+        dispatchEvent: () => false,
+      }) as unknown as MediaQueryList,
+  });
+}
+
 /* ------------------------------------------------------------------- stubs */
 
 import type { GpuPmApi } from '@shared/contracts';
@@ -159,6 +178,9 @@ export function createStubBridge(state: StubState): GpuPmApi {
     settings: {
       get: async () => ({}) as never,
       update: async () => ({}) as never,
+    },
+    clipboard: {
+      writeText: async () => true,
     },
   };
 }

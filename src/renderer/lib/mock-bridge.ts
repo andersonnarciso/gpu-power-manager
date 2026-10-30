@@ -633,6 +633,25 @@ export class MockBridge implements GpuPmApi {
     },
   };
 
+  /* -------------------------------------------------------------- clipboard */
+
+  readonly clipboard = {
+    /**
+     * The browser preview has no main process, so the web clipboard API is
+     * the only option. The result is reported honestly: `false` when the
+     * browser refused the copy.
+     */
+    writeText: async (text: string): Promise<boolean> => {
+      try {
+        if (!navigator.clipboard || !window.isSecureContext) return false;
+        await navigator.clipboard.writeText(text);
+        return true;
+      } catch {
+        return false;
+      }
+    },
+  };
+
   /* ----------------------------------------------------------- internals */
 
   private currentDevices(): GpuDevice[] {

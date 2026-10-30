@@ -150,7 +150,7 @@ O projeto foi construído em um **loop Executor ↔ Verificador cego**: cada ár
 
 **6 rodadas de verificação, 4 rejeições.** Os defeitos que o loop pegou e o código sozinho não pegaria:
 
-| Defeito | Por que só a medição revealing |
+| Defeito | Por que só a medição reveladora |
 |---|---|
 | O preload sandboxed não resolvia `require` relativo | O preload morria ao carregar e a UI caía **silenciosamente no mock**, mostrando **dados simulados com os UUIDs reais das GPUs** |
 | `0 J/token` no caminho padrão de LLM | Carga de 0,8 s = 1 amostra = 0 J → "eficiência" infinita |
@@ -161,6 +161,18 @@ O projeto foi construído em um **loop Executor ↔ Verificador cego**: cada ár
 | O fallback "nenhum limite qualificou" era inalcançável | A referência se auto-qualificava com delta 0 % e exibia uma recomendação verde que não economizava nada |
 
 O registro completo: [`docs/GAUNTLET.md`](docs/GAUNTLET.md) · Modelo de segurança: [`docs/SECURITY.md`](docs/SECURITY.md)
+
+### Correções depois da release v1.0.0
+
+O usuário reportou três defeitos na versão publicada. Nenhum foi corrigido no escuro: os três foram **reproduzidos no aplicativo real** — com o processo do Electron em execução, medindo o DOM e lendo o clipboard do sistema — antes de qualquer alteração.
+
+| Defeito | Causa real | Correção |
+|---|---|---|
+| "Não foi possível copiar" ao copiar o UUID das GPUs | A API de clipboard da web é recusada dentro do Electron (`NotAllowedError: Write permission denied`), e o `execCommand` legado **devolve `false` sem lançar** — ou seja, uma cópia que falhou podia ser reportada como "Copiado" | A cópia passa pelo processo principal, por um canal IPC validado; o booleano devolvido é respeitado e **só aparece "Copiado" quando o texto chegou ao clipboard** |
+| O rótulo "PT" ficava **fora** do botão de idioma | O botão usava o tamanho quadrado de 32 px (`w-8`) com um texto dentro: `scrollWidth` de 37 px contra `clientWidth` de 32 px | O botão passou a ter largura pelo conteúdo; o texto cabe dentro dele |
+| O botão de idioma ficava colado na borda da janela | Consequência do mesmo transbordo, do lado direito do cabeçalho | O botão tem respiro próprio e o cabeçalho mantém o recuo da janela |
+
+Verificado no aplicativo real, com as duas GPUs da máquina: o clipboard do sistema passou a receber `GPU-ff55d89d-783a-8b9e-c442-155cf9a971f1` e `GPU-e446ad0d-23c5-4ba3-93ad-e02de3969646` — lidos por um processo separado, fora do aplicativo.
 
 ---
 
@@ -202,7 +214,7 @@ O registro completo: [`docs/GAUNTLET.md`](docs/GAUNTLET.md) · Modelo de seguran
 ## Testes
 
 ```bash
-npm test             # vitest — 450 testes, 30 arquivos
+npm test             # vitest — 461 testes, 33 arquivos
 npm run typecheck    # main + preload + renderer + testes
 ```
 

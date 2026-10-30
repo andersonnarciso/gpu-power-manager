@@ -63,10 +63,16 @@ function applyContentSecurityPolicy(): void {
     });
   });
 
-  // Nothing in this app needs a camera, a microphone or a location.
-  session.defaultSession.setPermissionRequestHandler((_webContents, _permission, callback) => {
-    callback(false);
+  // Nothing in this app needs a camera, a microphone or a location. The only
+  // exception is *writing* to the clipboard, which the "copy" button needs:
+  // reading the user's clipboard stays forbidden.
+  const ALLOWED_PERMISSIONS = new Set(['clipboard-write', 'clipboard-sanitized-write']);
+  session.defaultSession.setPermissionRequestHandler((_webContents, permission, callback) => {
+    callback(ALLOWED_PERMISSIONS.has(permission));
   });
+  session.defaultSession.setPermissionCheckHandler((_webContents, permission) =>
+    ALLOWED_PERMISSIONS.has(permission),
+  );
 }
 
 /**

@@ -30,6 +30,7 @@ Este documento descreve as garantias de segurança do **GPU Power Manager** e co
 | Carregamento remoto | `webSecurity` ligado; `setWindowOpenHandler` retorna `deny` |
 | Denial of service | Timeouts em toda chamada externa; polling sem sobreposição |
 | Vazamento de segredo | Nenhuma credencial é armazenada, lida ou exibida |
+| Clipboard do usuário | Toda permissão do Chromium é negada por padrão; **apenas a escrita** (`clipboard-write`) é liberada, para o botão "copiar". A **leitura** (`clipboard-read`) permanece negada — o aplicativo nunca lê o que o usuário copiou |
 
 ---
 

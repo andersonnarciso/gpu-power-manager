@@ -3,6 +3,7 @@ import { Check, Copy } from 'lucide-react';
 import { cn } from '@renderer/lib/utils';
 import { useT } from '@renderer/lib/i18n';
 import { useUiStore } from '@renderer/store/ui';
+import { writeToClipboard } from '@renderer/lib/clipboard';
 import { Button } from '@renderer/components/ui/button';
 
 export interface CopyableValueProps {
@@ -13,8 +14,10 @@ export interface CopyableValueProps {
 }
 
 /**
- * Read-only value that can be copied to the clipboard. Works without the
- * async clipboard API by falling back to a temporary selection.
+ * Read-only value that can be copied to the clipboard.
+ *
+ * The copy is only reported as successful when the text really reached the
+ * clipboard — otherwise the user would be told a lie.
  */
 export function CopyableValue({
   value,
@@ -27,26 +30,16 @@ export function CopyableValue({
   const [copied, setCopied] = useState(false);
 
   const copy = useCallback(async (): Promise<void> => {
-    try {
-      if (navigator.clipboard && window.isSecureContext) {
-        await navigator.clipboard.writeText(value);
-      } else {
-        const area = document.createElement('textarea');
-        area.value = value;
-        area.setAttribute('readonly', 'true');
-        area.style.position = 'fixed';
-        area.style.opacity = '0';
-        document.body.appendChild(area);
-        area.select();
-        document.execCommand('copy');
-        document.body.removeChild(area);
-      }
-      setCopied(true);
-      window.setTimeout(() => setCopied(false), 1600);
-      pushToast({ variant: 'success', title: t('common.copied'), description: display });
-    } catch {
+    const succeeded = await writeToClipboard(value);
+
+    if (!succeeded) {
       pushToast({ variant: 'error', title: t('common.copyFailed'), description: value });
+      return;
     }
+
+    setCopied(true);
+    window.setTimeout(() => setCopied(false), 1600);
+    pushToast({ variant: 'success', title: t('common.copied'), description: display });
   }, [display, pushToast, t, value]);
 
   return (

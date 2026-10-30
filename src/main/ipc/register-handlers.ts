@@ -7,7 +7,7 @@
  * stack trace.
  */
 
-import { BrowserWindow, ipcMain } from 'electron';
+import { BrowserWindow, clipboard, ipcMain } from 'electron';
 import { IPC, INVOKE_CHANNELS } from '../../shared/ipc';
 import type { AppContext } from '../app-context';
 import type { AppError, PowerLimitRequest, PowerProfile } from '../../shared/types';
@@ -20,6 +20,7 @@ import {
   assertNumberRange,
   assertOneOf,
   assertPlainObject,
+  assertString,
   assertWatts,
   toAppError,
   ValidationError,
@@ -292,6 +293,23 @@ export function registerIpcHandlers(options: RegisterHandlersOptions): () => voi
     applyNativeTheme(updated.theme, window);
 
     return updated;
+  });
+
+  /* -------------------------------------------------------------- clipboard */
+
+  /**
+   * Copies text using the clipboard of the main process.
+   *
+   * The renderer cannot do this on its own: `navigator.clipboard.writeText`
+   * is refused unless the document is focused and the permission was granted,
+   * and the legacy `execCommand('copy')` returns `false` instead of failing.
+   * The main process always has a working clipboard, so the copy is honest
+   * here: `true` only when the text really reached the clipboard.
+   */
+  handle(IPC.clipboardWriteText, async (payload) => {
+    const text = assertString(payload, 'text', 8192);
+    clipboard.writeText(text);
+    return true;
   });
 
   /* ------------------------------------------------------- push telemetry */
