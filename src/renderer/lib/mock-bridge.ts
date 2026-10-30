@@ -62,6 +62,7 @@ const DEFAULT_SETTINGS: AppSettings = {
   historyWindowMinutes: 5,
   historyRetentionMinutes: 60,
   simulateMode: true,
+  hideHardwareIdentifiers: false,
   autoApplyProfileOnBoot: false,
   reduceMotion: false,
 };
@@ -124,6 +125,7 @@ export class MockBridge implements GpuPmApi {
       electronVersion: 'N/A',
       platform: 'linux',
       simulated: true,
+      hideHardwareIdentifiers: false,
       driverAvailable: false,
       runningAsRoot: false,
       nvidiaSmiPath: null,

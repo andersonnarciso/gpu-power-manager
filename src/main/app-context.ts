@@ -138,11 +138,23 @@ export interface CreateAppContextOptions {
   userDataPath?: string;
   /** Forces the simulator on or off, used by the tests. */
   simulate?: boolean;
+  /**
+   * Hides the NVIDIA hardware identifiers in the interface.
+   *
+   * Used by the documentation capture (`--hide-identifiers`) so that the
+   * published screenshots never carry the UUID that identifies the board.
+   */
+  hideIdentifiers?: boolean;
 }
 
 export function createAppContext(options: CreateAppContextOptions = {}): AppContext {
   const userDataPath = options.userDataPath ?? app.getPath('userData');
   const settings = new SettingsServiceImpl({ filePath: `${userDataPath}/settings.json` });
+
+  // Session-only override: it is never written to disk, so taking a
+  // documentation screenshot does not change the configuration of the
+  // installed application.
+  const sessionHideIdentifiers = options.hideIdentifiers === true;
 
   const preferred = options.simulate ?? settings.get().simulateMode;
   const realSource = new NvidiaGpuSource({ logger });
@@ -308,6 +320,8 @@ export function createAppContext(options: CreateAppContextOptions = {}): AppCont
         driverAvailable: !source.isSimulated(),
         runningAsRoot,
         nvidiaSmiPath,
+        hideHardwareIdentifiers:
+          sessionHideIdentifiers || settings.get().hideHardwareIdentifiers,
       };
     },
 

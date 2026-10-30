@@ -117,6 +117,7 @@ const ptBR = {
   'dashboard.fanSpeed': 'Ventoinha',
   'dashboard.uuid': 'UUID',
   'dashboard.copyUuid': 'Copiar UUID',
+  'dashboard.identifierHidden': 'Identificador oculto',
   'dashboard.throttling': 'Limitação',
   'dashboard.throttlingActive': 'Limitação ativa',
   'dashboard.throttlingNone': 'Sem limitação',
@@ -500,6 +501,9 @@ const ptBR = {
   'set.simulateMode': 'Modo de simulação',
   'set.simulateModeHint':
     'Em modo de simulação todos os valores são gerados localmente e não correspondem a hardware real.',
+  'set.hideIdentifiers': 'Ocultar identificadores de hardware',
+  'set.hideIdentifiersHint':
+    'Esconde o UUID da GPU, que é o identificador usado pela NVIDIA para distinguir cada placa. A interface, as capturas de tela e as exportações passam a mostrar apenas um rótulo neutro.',
   'set.boot': 'Inicialização',
   'set.applyOnBoot': 'Aplicar perfil ao iniciar o Linux',
   'set.applyOnBootHint': 'Requer o serviço privilegiado instalado e ativado.',
@@ -523,6 +527,7 @@ const ptBR = {
   'set.persistenceDisableSuccess': 'Serviço desativado no arranque.',
   'set.persistenceApplySuccess': 'Perfil aplicado.',
   'set.saved': 'Definições guardadas.',
+  'set.privacy': 'Privacidade',
   'set.endpoints': 'Endpoints das medições',
   'set.endpointsHint':
     'Endereços que os adaptadores usam para falar com Ollama, llama.cpp e ComfyUI. Sem configuração, são usadas as portas padrão.',
@@ -690,6 +695,7 @@ const en: Record<TranslationKey, string> = {
   'dashboard.fanSpeed': 'Fan',
   'dashboard.uuid': 'UUID',
   'dashboard.copyUuid': 'Copy UUID',
+  'dashboard.identifierHidden': 'Identifier hidden',
   'dashboard.throttling': 'Throttling',
   'dashboard.throttlingActive': 'Throttling active',
   'dashboard.throttlingNone': 'No throttling',
@@ -1072,6 +1078,9 @@ const en: Record<TranslationKey, string> = {
   'set.simulateMode': 'Simulation mode',
   'set.simulateModeHint':
     'In simulation mode every value is generated locally and does not correspond to real hardware.',
+  'set.hideIdentifiers': 'Hide hardware identifiers',
+  'set.hideIdentifiersHint':
+    'Hides the GPU UUID, the identifier NVIDIA uses to tell one board from another. The interface, screenshots and exports show a neutral label instead.',
   'set.boot': 'Boot',
   'set.applyOnBoot': 'Apply profile when Linux starts',
   'set.applyOnBootHint': 'Requires the privileged service to be installed and enabled.',
@@ -1095,6 +1104,7 @@ const en: Record<TranslationKey, string> = {
   'set.persistenceDisableSuccess': 'Service disabled at boot.',
   'set.persistenceApplySuccess': 'Profile applied.',
   'set.saved': 'Settings saved.',
+  'set.privacy': 'Privacy',
   'set.endpoints': 'Benchmark endpoints',
   'set.endpointsHint':
     'Addresses the adapters use to talk to Ollama, llama.cpp and ComfyUI. Without a configuration the default ports are used.',

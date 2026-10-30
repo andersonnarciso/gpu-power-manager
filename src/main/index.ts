@@ -149,8 +149,9 @@ async function bootstrap(): Promise<void> {
   applyContentSecurityPolicy();
 
   const simulate = process.argv.includes('--simulate');
+  const hideIdentifiers = process.argv.includes('--hide-identifiers');
 
-  context = createAppContext({ simulate });
+  context = createAppContext({ simulate, hideIdentifiers });
 
   const window = await createWindow();
   mainWindow = window;
@@ -171,6 +172,7 @@ async function bootstrap(): Promise<void> {
 
   logger.info('Aplicativo iniciado.', {
     simulated: context.isSimulated(),
+    hideIdentifiers: context.settings.get().hideHardwareIdentifiers,
     development: isDevelopment,
   });
 }

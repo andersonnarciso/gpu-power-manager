@@ -48,6 +48,20 @@ Carga de 0,8 s não produz amostra suficiente? O app mostra um **traço** no lug
 
 ## Capturas
 
+> **Estas imagens são da máquina real, não do simulador.** A captura é feita sem a flag
+> `--simulate`: o cabeçalho mostra "Driver NVIDIA detectado" e as placas exibidas são a
+> RTX 4070 Ti e a RTX 5060 Ti com telemetria ao vivo do driver.
+>
+> Para que nenhum print carregue o identificador que a NVIDIA usa para distinguir cada
+> placa (o UUID da GPU), a captura roda com `--hide-identifiers`: o app continua lendo o
+> UUID real para falar com o driver, mas a interface mostra apenas "Identificador oculto".
+> A mesma opção está em **Configurações → Privacidade**, para o caso de você compartilhar
+> a tela ou exportar relatórios.
+>
+> O script de captura verifica cada imagem depois de gerada: se um UUID de GPU ou uma GPU
+> "(simulado)" aparecer no DOM, a captura é reprovada e o arquivo não é aceito.
+> Para regerar o conjunto: `npm run capture:docs`.
+
 ### Painel: tempo real, duas GPUs
 
 ![Painel com duas GPUs, gráficos ao vivo](docs/screenshots/01-painel-dark.png)

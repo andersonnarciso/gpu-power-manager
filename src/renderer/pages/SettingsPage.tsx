@@ -1,5 +1,5 @@
 import { useCallback, useEffect, useState } from 'react';
-import { Info, Lock, Settings as SettingsIcon, ShieldCheck, Unlock } from 'lucide-react';
+import { EyeOff, Info, Lock, Settings as SettingsIcon, ShieldCheck, Unlock } from 'lucide-react';
 import type {
   Locale,
   PersistenceStatus,
@@ -291,6 +291,15 @@ export function SettingsPage(): React.JSX.Element {
             hint={t('set.applyOnBootHint')}
             checked={settings.autoApplyProfileOnBoot}
             onChange={(value) => void updateSettings({ autoApplyProfileOnBoot: value })}
+          />
+        </SettingsCard>
+
+        <SettingsCard title={t('set.privacy')} icon={<EyeOff className="h-4 w-4" />}>
+          <SwitchField
+            label={t('set.hideIdentifiers')}
+            hint={t('set.hideIdentifiersHint')}
+            checked={settings.hideHardwareIdentifiers}
+            onChange={(value) => void updateSettings({ hideHardwareIdentifiers: value })}
           />
         </SettingsCard>
 

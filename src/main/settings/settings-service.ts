@@ -41,6 +41,7 @@ export const DEFAULT_SETTINGS: AppSettings = {
   historyWindowMinutes: 5,
   historyRetentionMinutes: 60,
   simulateMode: false,
+  hideHardwareIdentifiers: false,
   autoApplyProfileOnBoot: false,
   reduceMotion: false,
   // The endpoints of the workload adapters. The defaults are the ports the
@@ -194,6 +195,8 @@ export function validateSettingField(
       );
     case 'simulateMode':
       return assertBoolean(value, 'simulateMode');
+    case 'hideHardwareIdentifiers':
+      return assertBoolean(value, 'hideHardwareIdentifiers');
     case 'autoApplyProfileOnBoot':
       return assertBoolean(value, 'autoApplyProfileOnBoot');
     case 'reduceMotion':

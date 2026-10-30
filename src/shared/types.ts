@@ -472,6 +472,15 @@ export interface AppSettings {
   historyRetentionMinutes: number;
   /** Force the simulated GPU source, even when real hardware exists. */
   simulateMode: boolean;
+  /**
+   * Hides the identifiers NVIDIA uses to tell one board from another (the GPU
+   * UUID and the PCI bus address) in the interface.
+   *
+   * The value stays available to the driver calls in the main process; only
+   * the interface hides it, so screenshots, exports and shared screens do not
+   * carry a value that identifies the physical board.
+   */
+  hideHardwareIdentifiers: boolean;
   autoApplyProfileOnBoot: boolean;
   reduceMotion: boolean;
   /**
@@ -513,6 +522,14 @@ export interface AppInfo {
   platform: string;
   /** True when the app is running against simulated GPUs. */
   simulated: boolean;
+  /**
+   * Effective privacy flag: the persisted setting OR a session override.
+   *
+   * The session override comes from the `--hide-identifiers` command line flag
+   * and is never written to disk, so taking a screenshot never changes the
+   * configuration of the installed application.
+   */
+  hideHardwareIdentifiers: boolean;
   /** True when an NVIDIA driver was detected. */
   driverAvailable: boolean;
   /** True when the process runs as root (must never happen). */

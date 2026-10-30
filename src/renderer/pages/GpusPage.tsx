@@ -8,6 +8,9 @@ import { Badge } from '@renderer/components/ui/badge';
 import { CopyableValue } from '@renderer/components/common/CopyableValue';
 import { DataRow } from '@renderer/components/common/StatTile';
 import { truncateMiddle } from '@renderer/lib/utils';
+import { useAppStore } from '@renderer/store/app';
+import { useSettingsStore } from '@renderer/store/settings';
+import { shouldHideIdentifier } from '@renderer/lib/privacy';
 
 function valueOrDash(value: string | number | null | undefined): string {
   return value === null || value === undefined || value === '' ? EM_DASH : String(value);
@@ -17,6 +20,10 @@ export function GpusPage(): React.JSX.Element {
   const t = useT();
   const locale = getLocale();
   const devices = useTelemetryStore((state) => state.devices);
+  const simulated = useAppStore((state) => state.simulated);
+  const hideIdentifiers =
+    useSettingsStore((state) => state.settings.hideHardwareIdentifiers) ||
+    (useAppStore((state) => state.info?.hideHardwareIdentifiers) ?? false);
 
   return (
     <div className="animate-fade-in">
@@ -49,12 +56,18 @@ export function GpusPage(): React.JSX.Element {
                     )}
                   </div>
                 </div>
-                <CopyableValue
-                  value={device.uuid}
-                  display={truncateMiddle(device.uuid, 16, 8)}
-                  label={t('dashboard.copyUuid')}
-                  className="mt-2"
-                />
+                {shouldHideIdentifier(device.uuid, hideIdentifiers, simulated) ? (
+                  <p className="mt-2 font-mono text-[11px] text-muted-foreground">
+                    {t('dashboard.identifierHidden')}
+                  </p>
+                ) : (
+                  <CopyableValue
+                    value={device.uuid}
+                    display={truncateMiddle(device.uuid, 16, 8)}
+                    label={t('dashboard.copyUuid')}
+                    className="mt-2"
+                  />
+                )}
               </CardHeader>
 
               <CardContent className="grid gap-4 md:grid-cols-2 xl:grid-cols-3">

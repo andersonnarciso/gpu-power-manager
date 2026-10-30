@@ -19,6 +19,7 @@ export const FALLBACK_SETTINGS: AppSettings = {
   historyWindowMinutes: 5,
   historyRetentionMinutes: 60,
   simulateMode: true,
+  hideHardwareIdentifiers: false,
   autoApplyProfileOnBoot: false,
   reduceMotion: false,
 };

@@ -9,6 +9,9 @@ import { Badge } from '@renderer/components/ui/badge';
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@renderer/components/ui/card';
 import { CopyableValue } from '@renderer/components/common/CopyableValue';
 import { StatTile } from '@renderer/components/common/StatTile';
+import { useAppStore } from '@renderer/store/app';
+import { useSettingsStore } from '@renderer/store/settings';
+import { shouldHideIdentifier } from '@renderer/lib/privacy';
 
 export interface GpuCardProps {
   device: GpuDevice;
@@ -20,6 +23,11 @@ export interface GpuCardProps {
 export function GpuCard({ device, position, total, locale }: GpuCardProps): React.JSX.Element {
   const t = useT();
   const adjustable = device.capabilities.powerLimitAdjustable;
+  const simulated = useAppStore((state) => state.simulated);
+  const hideIdentifiers =
+    useSettingsStore((state) => state.settings.hideHardwareIdentifiers) ||
+    (useAppStore((state) => state.info?.hideHardwareIdentifiers) ?? false);
+  const identifierHidden = shouldHideIdentifier(device.uuid, hideIdentifiers, simulated);
 
   return (
     <Card className={cn('overflow-hidden', !device.present && 'opacity-70')}>
@@ -42,12 +50,18 @@ export function GpuCard({ device, position, total, locale }: GpuCardProps): Reac
             )}
           </div>
         </div>
-        <CopyableValue
-          value={device.uuid}
-          display={truncateMiddle(device.uuid, 12, 6)}
-          label={t('dashboard.copyUuid')}
-          className="mt-2"
-        />
+        {identifierHidden ? (
+          <p className="mt-2 font-mono text-[11px] text-muted-foreground">
+            {t('dashboard.identifierHidden')}
+          </p>
+        ) : (
+          <CopyableValue
+            value={device.uuid}
+            display={truncateMiddle(device.uuid, 12, 6)}
+            label={t('dashboard.copyUuid')}
+            className="mt-2"
+          />
+        )}
       </CardHeader>
 
       <CardContent>
