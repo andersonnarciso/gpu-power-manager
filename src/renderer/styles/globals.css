@@ -1,0 +1,203 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+@layer base {
+  :root {
+    /*
+     * Light theme.
+     *
+     * The page surface is a soft neutral gray and the cards are pure white:
+     * on an all-white page the cards lose their depth and the layout reads
+     * as a flat sheet of text. The accent is a deep lime, because the brand
+     * lime (#a3e635) has a contrast ratio below 4.5:1 on white and cannot be
+     * used for text or thin strokes in this theme.
+     */
+    --background: 220 24% 97%;
+    --foreground: 220 20% 12%;
+
+    --card: 0 0% 100%;
+    --card-foreground: 220 20% 12%;
+
+    --popover: 0 0% 100%;
+    --popover-foreground: 220 20% 12%;
+
+    --primary: 84 72% 30%;
+    --primary-foreground: 0 0% 100%;
+
+    --secondary: 220 20% 94%;
+    --secondary-foreground: 220 20% 18%;
+
+    --muted: 220 20% 94%;
+    --muted-foreground: 220 10% 42%;
+
+    --accent: 220 20% 91%;
+    --accent-foreground: 220 20% 18%;
+
+    --destructive: 0 72% 45%;
+    --destructive-foreground: 0 0% 100%;
+
+    --success: 142 65% 30%;
+    --success-foreground: 0 0% 100%;
+
+    --warning: 32 90% 34%;
+    --warning-foreground: 0 0% 100%;
+
+    --info: 199 89% 34%;
+    --info-foreground: 0 0% 100%;
+
+    --border: 220 16% 86%;
+    --input: 220 16% 86%;
+    --ring: 84 72% 30%;
+
+    --radius: 0.625rem;
+  }
+
+  .dark {
+    --background: 220 13% 5%;
+    --foreground: 210 20% 96%;
+
+    --card: 216 14% 7%;
+    --card-foreground: 210 20% 96%;
+
+    --popover: 216 14% 7%;
+    --popover-foreground: 210 20% 96%;
+
+    --primary: 83 79% 55%;
+    --primary-foreground: 220 13% 5%;
+
+    --secondary: 214 14% 10%;
+    --secondary-foreground: 210 20% 96%;
+
+    --muted: 214 14% 10%;
+    --muted-foreground: 215 12% 62%;
+
+    --accent: 214 14% 12%;
+    --accent-foreground: 210 20% 96%;
+
+    --destructive: 0 72% 55%;
+    --destructive-foreground: 210 20% 98%;
+
+    --success: 83 79% 55%;
+    --success-foreground: 220 13% 5%;
+
+    --warning: 38 92% 58%;
+    --warning-foreground: 220 13% 5%;
+
+    --info: 199 89% 55%;
+    --info-foreground: 220 13% 5%;
+
+    --border: 215 14% 17%;
+    --input: 215 14% 17%;
+    --ring: 83 79% 55%;
+  }
+
+  * {
+    @apply border-border;
+  }
+
+  html,
+  body,
+  #root {
+    height: 100%;
+  }
+
+  body {
+    @apply bg-background text-foreground antialiased;
+    font-feature-settings: 'cv02', 'cv03', 'cv04', 'tnum';
+    text-rendering: optimizeLegibility;
+    overflow: hidden;
+  }
+
+  ::selection {
+    @apply bg-primary/30 text-foreground;
+  }
+
+  /* Scrollbars ------------------------------------------------------------ */
+  * {
+    scrollbar-width: thin;
+    scrollbar-color: hsl(var(--border)) transparent;
+  }
+
+  ::-webkit-scrollbar {
+    width: 10px;
+    height: 10px;
+  }
+
+  ::-webkit-scrollbar-track {
+    background: transparent;
+  }
+
+  ::-webkit-scrollbar-thumb {
+    background-color: hsl(var(--border));
+    border-radius: 9999px;
+    border: 3px solid transparent;
+    background-clip: content-box;
+  }
+
+  ::-webkit-scrollbar-thumb:hover {
+    background-color: hsl(var(--muted-foreground) / 0.6);
+  }
+
+  /* Focus ---------------------------------------------------------------- */
+  :focus-visible {
+    @apply outline-none ring-2 ring-ring ring-offset-2 ring-offset-background;
+  }
+
+  input[type='number']::-webkit-outer-spin-button,
+  input[type='number']::-webkit-inner-spin-button {
+    -webkit-appearance: none;
+    margin: 0;
+  }
+
+  input[type='number'] {
+    -moz-appearance: textfield;
+  }
+}
+
+@layer components {
+  /* Numeric read-outs: aligned digits, monospaced weight. */
+  .metric {
+    @apply tabular-nums tracking-tight;
+  }
+
+  .panel-grid {
+    background-image: linear-gradient(to right, hsl(var(--border) / 0.55) 1px, transparent 1px),
+      linear-gradient(to bottom, hsl(var(--border) / 0.55) 1px, transparent 1px);
+    background-size: 28px 28px;
+  }
+
+  .scrollbar-none {
+    scrollbar-width: none;
+  }
+
+  .scrollbar-none::-webkit-scrollbar {
+    display: none;
+  }
+}
+
+/* Reduced motion ---------------------------------------------------------- */
+@media (prefers-reduced-motion: reduce) {
+  *,
+  *::before,
+  *::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+    scroll-behavior: auto !important;
+  }
+}
+
+/* Explicit opt-in from the Settings page. */
+.reduce-motion *,
+.reduce-motion *::before,
+.reduce-motion *::after {
+  animation-duration: 0.01ms !important;
+  animation-iteration-count: 1 !important;
+  transition-duration: 0.01ms !important;
+  scroll-behavior: auto !important;
+}
+
+.reduce-motion .animate-pulse-dot {
+  animation: none !important;
+}

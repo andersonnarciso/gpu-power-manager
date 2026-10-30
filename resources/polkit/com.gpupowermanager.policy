@@ -1,0 +1,63 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE policyconfig PUBLIC
+ "-//freedesktop//DTD PolicyKit Policy Configuration 1.0//EN"
+ "http://www.freedesktop.org/standards/PolicyKit/1.0/policyconfig.dtd">
+<policyconfig>
+
+  <vendor>GPU Power Manager</vendor>
+  <vendor_url>https://github.com/andersonnarciso/gpu-power-manager</vendor_url>
+  <icon_name>preferences-system-power</icon_name>
+
+  <!--
+    The administrative identities of the system are the members of the local
+    wheel/sudo groups (polkit.group="wheel" on Fedora like distributions,
+    polkit.group="sudo" on Debian like ones). Every action below therefore
+    requires an authentication made by one of those administrators.
+
+    The power limit action uses `auth_admin_keep`: the administrator
+    authenticates once and the authorisation is cached for a few minutes, so a
+    series of adjustments does not ask for the password on every click. It is
+    still an *administrative* authorisation - never a passwordless sudo.
+  -->
+
+  <action id="com.gpupowermanager.set-power-limit">
+    <description xml:lang="pt_BR">Definir o limite de potência de uma GPU NVIDIA</description>
+    <description xml:lang="en">Set the power limit of an NVIDIA GPU</description>
+    <message xml:lang="pt_BR">O GPU Power Manager precisa de autorização para alterar o limite de potência da GPU NVIDIA.</message>
+    <message xml:lang="en">GPU Power Manager needs authorization to change the power limit of the NVIDIA GPU.</message>
+    <defaults>
+      <allow_any>auth_admin</allow_any>
+      <allow_inactive>auth_admin</allow_inactive>
+      <allow_active>auth_admin_keep</allow_active>
+    </defaults>
+    <annotate key="org.freedesktop.policykit.exec.path">/usr/local/libexec/gpu-power-manager-helper</annotate>
+    <annotate key="polkit.group">wheel</annotate>
+  </action>
+
+  <action id="com.gpupowermanager.install-helper">
+    <description xml:lang="pt_BR">Instalar ou remover o utilitário privilegiado do GPU Power Manager</description>
+    <description xml:lang="en">Install or remove the GPU Power Manager privileged helper</description>
+    <message xml:lang="pt_BR">É necessária autorização administrativa para instalar ou remover o utilitário privilegiado e a política do polkit.</message>
+    <message xml:lang="en">Administrative authorization is required to install or remove the privileged helper and the polkit policy.</message>
+    <defaults>
+      <allow_any>auth_admin</allow_any>
+      <allow_inactive>auth_admin</allow_inactive>
+      <allow_active>auth_admin</allow_active>
+    </defaults>
+    <annotate key="polkit.group">wheel</annotate>
+  </action>
+
+  <action id="com.gpupowermanager.manage-persistence">
+    <description xml:lang="pt_BR">Gerenciar a persistência do limite de potência (unidade systemd)</description>
+    <description xml:lang="en">Manage the power limit persistence (systemd unit)</description>
+    <message xml:lang="pt_BR">É necessária autorização administrativa para gerenciar a unidade de sistema que aplica o limite de potência no início da sessão.</message>
+    <message xml:lang="en">Administrative authorization is required to manage the system unit that applies the power limit at session start.</message>
+    <defaults>
+      <allow_any>auth_admin</allow_any>
+      <allow_inactive>auth_admin</allow_inactive>
+      <allow_active>auth_admin</allow_active>
+    </defaults>
+    <annotate key="polkit.group">wheel</annotate>
+  </action>
+
+</policyconfig>

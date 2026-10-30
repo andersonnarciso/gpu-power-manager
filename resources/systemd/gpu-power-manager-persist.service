@@ -1,0 +1,19 @@
+[Unit]
+Description=GPU Power Manager - aplicação dos limites de potência no boot
+Documentation=man:nvidia-smi(1)
+After=network.target systemd-modules-load.service nvidia-persistenced.service
+Wants=network.target
+ConditionPathExists=/var/lib/gpu-power-manager/profile.json
+
+[Service]
+Type=oneshot
+RemainAfterExit=yes
+ExecStart=/usr/local/lib/gpu-power-manager/gpu-power-manager-apply.py
+StandardOutput=journal
+StandardError=journal
+Restart=no
+TimeoutStartSec=180
+Nice=10
+
+[Install]
+WantedBy=multi-user.target

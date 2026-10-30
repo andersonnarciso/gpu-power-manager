@@ -1,0 +1,17 @@
+{
+  // Typechecks the test suite together with the sources it exercises.
+  //
+  // The suite used to ship four files that did not even compile, because no
+  // configuration included `tests/`. This configuration is part of the
+  // `typecheck` script, so a broken test file can never be committed again.
+  "extends": "./tsconfig.json",
+  "compilerOptions": {
+    "module": "ESNext",
+    "moduleResolution": "bundler",
+    "lib": ["ES2022", "DOM", "DOM.Iterable"],
+    "jsx": "react-jsx",
+    "noEmit": true,
+    "types": ["node", "vite/client"]
+  },
+  "include": ["tests/**/*.ts", "src/**/*.ts", "src/**/*.tsx"]
+}

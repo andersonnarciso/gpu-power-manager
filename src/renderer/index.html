@@ -1,0 +1,28 @@
+<!doctype html>
+<html lang="pt-BR" class="dark">
+  <head>
+    <meta charset="UTF-8" />
+    <!--
+      Strict Content Security Policy.
+      Everything the renderer loads is bundled locally: no CDN, no remote font,
+      no external image. `style-src 'unsafe-inline'` is required because Radix
+      primitives and Recharts set element styles at runtime.
+    -->
+    <meta
+      http-equiv="Content-Security-Policy"
+      content="default-src 'self'; script-src 'self'; style-src 'self' 'unsafe-inline'; img-src 'self' data:; connect-src 'self'"
+    />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <link
+      rel="icon"
+      href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'%3E%3Crect width='32' height='32' rx='7' fill='%230a0b0d'/%3E%3Cpath d='M17.5 4 8 18.2h6.1L13 28l9.6-14.2h-6.2z' fill='%23a3e635'/%3E%3C/svg%3E"
+    />
+    <meta name="color-scheme" content="dark light" />
+    <meta name="description" content="Gerenciamento, monitoramento e otimizacao energetica de GPUs NVIDIA em Linux." />
+    <title>GPU Power Manager</title>
+  </head>
+  <body>
+    <div id="root"></div>
+    <script type="module" src="./main.tsx"></script>
+  </body>
+</html>

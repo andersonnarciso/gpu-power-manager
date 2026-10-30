@@ -1,0 +1,51 @@
+appId: com.gpupowermanager.app
+productName: GPU Power Manager
+copyright: Copyright © 2026 Anderson Narciso
+# `homepage` e `repository` são lidos do package.json.
+
+directories:
+  output: release
+  buildResources: resources
+
+files:
+  - out/**/*
+  - dist/**/*
+  - package.json
+  - "!**/*.map"
+
+extraResources:
+  - from: resources/systemd
+    to: systemd
+  - from: resources/polkit
+    to: polkit
+  - from: helper
+    to: helper
+
+asar: true
+
+linux:
+  target:
+    - AppImage
+    - deb
+  category: Utility
+  synopsis: Gerenciador de energia e power limit para GPUs NVIDIA
+  description: Detecta, monitora e controla o consumo energético de GPUs NVIDIA, com perfis de energia, persistência via systemd e benchmark de eficiência energética para cargas de IA local.
+  maintainer: Anderson Narciso
+  icon: resources/icons
+  executableName: gpu-power-manager
+  # `linux.desktop` é um mapa plano de chaves do arquivo .desktop.
+  # (Um `entry:` aninhado aqui produz um "entry=[object Object]" inválido.)
+  desktop:
+    Keywords: gpu;nvidia;power;energy;monitoring;benchmark;power-limit;
+
+deb:
+  priority: optional
+  depends:
+    - nvidia-utils | libnvidia-ml1
+    - python3
+    - policykit-1
+  fpm:
+    - --name=gpu-power-manager
+
+appImage:
+  artifactName: GPU-Power-Manager-${version}-${arch}.AppImage
