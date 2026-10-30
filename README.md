@@ -4,12 +4,12 @@
 
 # GPU Power Manager
 
-**Gerenciador de energia para GPUs NVIDIA no Linux — ajuste o *power limit* e meça a eficiência energética real de cargas de IA local.**
+**Gerenciador de energia para GPUs NVIDIA no Linux: ajuste o *power limit* e meça a eficiência energética real de cargas de IA local.**
 
 [![Licença](https://img.shields.io/badge/licença-Apache%202.0-blue.svg)](LICENSE)
 [![Plataforma](https://img.shields.io/badge/plataforma-Linux-lightgrey.svg)](https://www.kernel.org/)
 [![Electron](https://img.shields.io/badge/Electron-33-47848F.svg)](https://www.electronjs.org/)
-[![Testes](https://img.shields.io/badge/testes-450%20verde-brightgreen.svg)](#testes)
+[![Testes](https://img.shields.io/badge/testes-461%20verde-brightgreen.svg)](#testes)
 
 [Português (Brasil)](#) · [English](#english)
 
@@ -23,7 +23,7 @@ Rodar IA local consome energia. E é fácil cair em três erros:
 
 1. **Confundir *power limit* com consumo.** O limite é um **teto** que o driver permite; o consumo real é outro número. Uma placa ociosa a 7 W com limite de 285 W não está "usando" 285 W.
 2. **Achar que reduzir o limite reduz o custo na mesma proporção.** Não reduz. O ganho de energia é **medido**, não suposto.
-3. **Inventar números de desempenho.** Tokens por segundo não se estimam — se medem.
+3. **Inventar números de desempenho.** Tokens por segundo não se estimam. Se medem.
 
 Este app existe para não cair em nenhum dos três.
 
@@ -31,10 +31,10 @@ Este app existe para não cair em nenhum dos três.
 
 | | |
 |---|---|
-| **Detecção real** | Lê `nvidia-smi` na inicialização e expõe UUID, PCI Bus ID, driver, CUDA, VRAM, utilização, temperatura, potência instantânea, *power limit* (atual/padrão/mín/máx), clocks, ventoinha e *throttling* — **identificando a GPU por UUID**, nunca por índice |
+| **Detecção real** | Lê `nvidia-smi` na inicialização e expõe UUID, PCI Bus ID, driver, CUDA, VRAM, utilização, temperatura, potência instantânea, *power limit* (atual/padrão/mín/máx), clocks, ventoinha e *throttling*, **identificando a GPU por UUID**, nunca por índice |
 | **Controle de potência** | Slider + campo numérico por GPU, faixa real do driver sempre visível, **valores fora da faixa rejeitados** (nunca ajustados em silêncio), alteração por helper privilegiado com **polkit** e **re-leitura de confirmação** |
-| **Energia medida** | Integral trapezoidal da **potência medida ao longo do tempo** — nunca `limite × duração`. Multi-GPU somada. J/token, Wh/imagem, Wh/segundo de vídeo |
-| **Otimizador** | Compara limites **medidos** e recomenda o de menor energia dentro da perda de desempenho aceitável — ou diz que nada qualificou |
+| **Energia medida** | Integral trapezoidal da **potência medida ao longo do tempo**, nunca `limite × duração`. Multi-GPU somada. J/token, Wh/imagem, Wh/segundo de vídeo |
+| **Otimizador** | Compara limites **medidos** e recomenda o de menor energia dentro da perda de desempenho aceitável, ou diz que nada qualificou |
 | **Persistência opcional** | Unidade systemd que aplica o perfil no boot, **depois** que o driver estiver pronto, revalidando cada faixa |
 | **Monitoramento de processos** | PID, processo, GPU e VRAM, com detecção de família (ComfyUI, llama.cpp, Ollama, Unsloth). **Nunca encerra processos** |
 
@@ -42,13 +42,13 @@ Este app existe para não cair em nenhum dos três.
 
 > **Uma medição que não foi feita nunca aparece como número.**
 
-Carga de 0,8 s não produz amostra suficiente? O app mostra **"—"**, não `0 J/token`. Cobertura de medição desconhecida? **"—"**. Sem taxa medida? **"—"**. Sem throughput de adapter? **"—"**.
+Carga de 0,8 s não produz amostra suficiente? O app mostra um **traço** no lugar do número, não `0 J/token`. Cobertura de medição desconhecida? **Traço**. Sem taxa medida? **Traço**. Sem throughput de adapter? **Traço**.
 
 ---
 
 ## Capturas
 
-### Painel — tempo real, duas GPUs
+### Painel: tempo real, duas GPUs
 
 ![Painel com duas GPUs, gráficos ao vivo](docs/screenshots/01-painel-dark.png)
 
@@ -58,7 +58,7 @@ Carga de 0,8 s não produz amostra suficiente? O app mostra **"—"**, não `0 J
 
 ![Página de limite de potência](docs/screenshots/03-power-limit-dark.png)
 
-A página separa explicitamente **potência instantânea**, **limite de potência** e **energia consumida** — as três grandezas que o app nunca confunde.
+A página separa explicitamente **potência instantânea**, **limite de potência** e **energia consumida**, as três grandezas que o app nunca confunde.
 
 ### Detalhe da GPU
 
@@ -117,14 +117,14 @@ Dentro do Electron, se a ponte privilegiada não carregar, o app **recusa exibir
 ### AppImage
 
 ```bash
-chmod +x GPU-Power-Manager-1.0.0-x86_64.AppImage
-./GPU-Power-Manager-1.0.0-x86_64.AppImage
+chmod +x GPU-Power-Manager-1.0.1-x86_64.AppImage
+./GPU-Power-Manager-1.0.1-x86_64.AppImage
 ```
 
 ### Pacote `.deb`
 
 ```bash
-sudo apt install ./gpu-power-manager_1.0.0_amd64.deb
+sudo apt install ./gpu-power-manager_1.0.1_amd64.deb
 ```
 
 Dependências: `nvidia-utils | libnvidia-ml1`, `python3`, `policykit-1`.
@@ -138,7 +138,7 @@ O app abre em modo **somente leitura**. Para permitir alterar o *power limit*:
 
 O helper vai para `/usr/local/libexec/gpu-power-manager-helper` (`root:root`, `0755`) e a política para `/usr/share/polkit-1/actions/com.gpupowermanager.policy`.
 
-> **O Electron nunca roda como root e o `sudo` sem senha nunca é configurado.** A ação polkit de ajuste de potência exige autorização administrativa (`auth_admin_keep` — pede uma vez e vale por alguns minutos).
+> **O Electron nunca roda como root e o `sudo` sem senha nunca é configurado.** A ação polkit de ajuste de potência exige autorização administrativa (`auth_admin_keep`: pede uma vez e vale por alguns minutos).
 
 Detalhes: [`docs/INSTALL.md`](docs/INSTALL.md) · Remoção: [`docs/REMOVE.md`](docs/REMOVE.md)
 
@@ -146,7 +146,7 @@ Detalhes: [`docs/INSTALL.md`](docs/INSTALL.md) · Remoção: [`docs/REMOVE.md`](
 
 ## Como a qualidade foi assegurada
 
-O projeto foi construído em um **loop Executor ↔ Verificador cego**: cada área foi implementada por um executor e depois julgada por um verificador que **não sabia como ela havia sido construída** e que só podia aprová-la com evidência real — executando código, medindo hardware, renderizando os componentes. Nada foi liberado por "compila" ou "os testes passam".
+O projeto foi construído em um **loop Executor ↔ Verificador cego**: cada área foi implementada por um executor e depois julgada por um verificador que **não sabia como ela havia sido construída** e que só podia aprová-la com evidência real: executando código, medindo hardware, renderizando os componentes. Nada foi liberado por "compila" ou "os testes passam".
 
 **6 rodadas de verificação, 4 rejeições.** Os defeitos que o loop pegou e o código sozinho não pegaria:
 
@@ -162,17 +162,17 @@ O projeto foi construído em um **loop Executor ↔ Verificador cego**: cada ár
 
 O registro completo: [`docs/GAUNTLET.md`](docs/GAUNTLET.md) · Modelo de segurança: [`docs/SECURITY.md`](docs/SECURITY.md)
 
-### Correções depois da release v1.0.0
+### Correções depois da release v1.0.0 (publicadas na v1.0.1)
 
-O usuário reportou três defeitos na versão publicada. Nenhum foi corrigido no escuro: os três foram **reproduzidos no aplicativo real** — com o processo do Electron em execução, medindo o DOM e lendo o clipboard do sistema — antes de qualquer alteração.
+O usuário reportou três defeitos na versão publicada. Nenhum foi corrigido no escuro: os três foram **reproduzidos no aplicativo real**, com o processo do Electron em execução, medindo o DOM e lendo o clipboard do sistema, tudo isso antes de qualquer alteração.
 
 | Defeito | Causa real | Correção |
 |---|---|---|
-| "Não foi possível copiar" ao copiar o UUID das GPUs | A API de clipboard da web é recusada dentro do Electron (`NotAllowedError: Write permission denied`), e o `execCommand` legado **devolve `false` sem lançar** — ou seja, uma cópia que falhou podia ser reportada como "Copiado" | A cópia passa pelo processo principal, por um canal IPC validado; o booleano devolvido é respeitado e **só aparece "Copiado" quando o texto chegou ao clipboard** |
+| "Não foi possível copiar" ao copiar o UUID das GPUs | A API de clipboard da web é recusada dentro do Electron (`NotAllowedError: Write permission denied`), e o `execCommand` legado **devolve `false` sem lançar**, ou seja, uma cópia que falhou podia ser reportada como "Copiado" | A cópia passa pelo processo principal, por um canal IPC validado; o booleano devolvido é respeitado e **só aparece "Copiado" quando o texto chegou ao clipboard** |
 | O rótulo "PT" ficava **fora** do botão de idioma | O botão usava o tamanho quadrado de 32 px (`w-8`) com um texto dentro: `scrollWidth` de 37 px contra `clientWidth` de 32 px | O botão passou a ter largura pelo conteúdo; o texto cabe dentro dele |
 | O botão de idioma ficava colado na borda da janela | Consequência do mesmo transbordo, do lado direito do cabeçalho | O botão tem respiro próprio e o cabeçalho mantém o recuo da janela |
 
-Verificado no aplicativo real, com as duas GPUs da máquina: o clipboard do sistema passou a receber `GPU-ff55d89d-783a-8b9e-c442-155cf9a971f1` e `GPU-e446ad0d-23c5-4ba3-93ad-e02de3969646` — lidos por um processo separado, fora do aplicativo.
+Verificado no aplicativo real, com as duas GPUs da máquina: o clipboard do sistema passou a receber `GPU-ff55d89d-783a-8b9e-c442-155cf9a971f1` e `GPU-e446ad0d-23c5-4ba3-93ad-e02de3969646`, lidos por um processo separado, fora do aplicativo.
 
 ---
 
@@ -186,7 +186,7 @@ Verificado no aplicativo real, com as duas GPUs da máquina: o clipboard do sist
 └───────────────────────────┬──────────────────────────────────┘
                             │ IPC (canais tipados, validados)
 ┌───────────────────────────┴──────────────────────────────────┐
-│ Preload — contextBridge, sandboxed, sem node, empacotado     │
+│ Preload: contextBridge, sandboxed, sem node, empacotado     │
 └───────────────────────────┬──────────────────────────────────┘
                             │
 ┌───────────────────────────┴──────────────────────────────────┐
@@ -214,7 +214,7 @@ Verificado no aplicativo real, com as duas GPUs da máquina: o clipboard do sist
 ## Testes
 
 ```bash
-npm test             # vitest — 461 testes, 33 arquivos
+npm test             # vitest: 461 testes, 33 arquivos
 npm run typecheck    # main + preload + renderer + testes
 ```
 
@@ -250,6 +250,6 @@ node scripts/capture-app.mjs --out /tmp/gpupm --shots 2
 
 ## Licença
 
-Apache-2.0 — veja [`LICENSE`](LICENSE).
+Apache-2.0. Veja [`LICENSE`](LICENSE).
 
 Copyright © 2026 Anderson Narciso.

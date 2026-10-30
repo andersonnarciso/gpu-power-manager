@@ -47,7 +47,7 @@ sudo rm -f /usr/share/polkit-1/actions/com.gpupowermanager.policy
 sudo apt remove gpu-power-manager
 sudo apt autoremove
 
-# AppImage — basta apagar o arquivo
+# AppImage: basta apagar o arquivo
 rm -f GPU-Power-Manager-*.AppImage
 ```
 

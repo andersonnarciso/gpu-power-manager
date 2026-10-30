@@ -1,7 +1,7 @@
 {
   "name": "gpu-power-manager",
   "productName": "GPU Power Manager",
-  "version": "1.0.0",
+  "version": "1.0.1",
   "description": "Gerenciamento, monitoramento e otimização energética de GPUs NVIDIA em Linux",
   "main": "out/main/index.js",
   "author": "Anderson Narciso",

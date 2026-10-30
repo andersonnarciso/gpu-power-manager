@@ -9,7 +9,7 @@ Este documento descreve as garantias de segurança do **GPU Power Manager** e co
 1. **O app Electron nunca roda como root.** Toda operação privilegiada é delegada a um helper separado, acionado via `pkexec` e autorizado pelo **polkit**.
 2. **A interface é entrada não confiável.** Nenhum valor vindo do renderer é usado antes de ser validado no processo main.
 3. **Nenhuma string de shell é montada com entrada do usuário.** Todo comando externo é executado com `execFile` e um **argv array**.
-4. **Privilégio mínimo.** O helper faz exatamente uma coisa — ajustar o power limit — e nada mais.
+4. **Privilégio mínimo.** O helper faz exatamente uma coisa, ajustar o power limit, e nada mais.
 5. **Nada de BIOS, firmware ou tensão.** O app não toca em volts, clocks ou firmware.
 
 ---
@@ -30,7 +30,7 @@ Este documento descreve as garantias de segurança do **GPU Power Manager** e co
 | Carregamento remoto | `webSecurity` ligado; `setWindowOpenHandler` retorna `deny` |
 | Denial of service | Timeouts em toda chamada externa; polling sem sobreposição |
 | Vazamento de segredo | Nenhuma credencial é armazenada, lida ou exibida |
-| Clipboard do usuário | Toda permissão do Chromium é negada por padrão; **apenas a escrita** (`clipboard-write`) é liberada, para o botão "copiar". A **leitura** (`clipboard-read`) permanece negada — o aplicativo nunca lê o que o usuário copiou |
+| Clipboard do usuário | Toda permissão do Chromium é negada por padrão; **apenas a escrita** (`clipboard-write`) é liberada, para o botão "copiar". A **leitura** (`clipboard-read`) permanece negada: o aplicativo nunca lê o que o usuário copiou |
 
 ---
 
@@ -98,7 +98,7 @@ A persistência é **desativada por padrão** e requer autorização administrat
 - ❌ Não aceita comandos arbitrários vindos da interface.
 - ❌ Não modifica BIOS, firmware, VBIOS ou tensão elétrica.
 - ❌ Não implementa *undervolting* real (o app não promete esse recurso).
-- ❌ Não confunde redução de power limit com redução de tensão — são coisas diferentes e a interface as trata separadamente.
+- ❌ Não confunde redução de power limit com redução de tensão: são coisas diferentes e a interface as trata separadamente.
 - ❌ Não implementa *overclocking* nesta versão.
 - ❌ Não encerra processos automaticamente.
 - ❌ Não altera o power limit com base no nome de um processo.

@@ -25,9 +25,8 @@ import {
 import { useSectionLabel } from './sectionMeta';
 
 /** Small badge with the product version. */
-function VersionBadge(): React.JSX.Element {
+function VersionBadge({ version }: { version: string }): React.JSX.Element {
   const t = useT();
-  const version = '1.0.0';
   return (
     <Badge variant="muted" className="font-mono text-[10px]">
       {t('app.version', { version })}
@@ -102,7 +101,9 @@ export function Header(): React.JSX.Element {
             <span className="truncate text-sm font-semibold tracking-tight">
               {t('app.name')}
             </span>
-            <VersionBadge />
+            {/* The badge only appears once the real version is known: a
+                placeholder in the header would look like a missing value. */}
+            {info && <VersionBadge version={info.version} />}
             <span className="hidden truncate text-xs text-muted-foreground md:inline">
               / {sectionLabel}
             </span>

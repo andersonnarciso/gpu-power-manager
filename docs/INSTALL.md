@@ -27,24 +27,24 @@ sudo apt install nvidia-utils policykit-1
 
 ## 2. Instalar o aplicativo
 
-### Opção A — AppImage (não requer instalação)
+### Opção A: AppImage (não requer instalação)
 
 ```bash
-chmod +x GPU-Power-Manager-1.0.0-x86_64.AppImage
-./GPU-Power-Manager-1.0.0-x86_64.AppImage
+chmod +x GPU-Power-Manager-1.0.1-x86_64.AppImage
+./GPU-Power-Manager-1.0.1-x86_64.AppImage
 ```
 
 O AppImage é autocontido. Roda em modo **somente leitura** até que o serviço privilegiado seja instalado.
 
-### Opção B — pacote `.deb`
+### Opção B: pacote `.deb`
 
 ```bash
-sudo apt install ./GPU-Power-Manager_1.0.0_amd64.deb
+sudo apt install ./gpu-power-manager_1.0.1_amd64.deb
 ```
 
 Dependências declaradas no pacote: `nvidia-utils` (ou `libnvidia-ml1`), `python3` (usado pelo helper privilegiado) e `policykit-1`.
 
-### Opção C — a partir do código
+### Opção C: a partir do código
 
 ```bash
 npm install
@@ -69,7 +69,7 @@ O instalador faz:
 | `gpu-power-manager-helper` | `/usr/local/libexec/gpu-power-manager-helper` | `root:root` | `0755` |
 | `com.gpupowermanager.policy` | `/usr/share/polkit-1/actions/com.gpupowermanager.policy` | `root:root` | `0644` |
 
-Depois de instalar, o app **verifica dono e modo** dos arquivos. Se o helper estiver gravável por usuários comuns, a instalação é abortada — um binário privilegiado gravável pelo usuário é uma escalação de privilégio.
+Depois de instalar, o app **verifica dono e modo** dos arquivos. Se o helper estiver gravável por usuários comuns, a instalação é abortada: um binário privilegiado gravável pelo usuário é uma escalação de privilégio.
 
 ### 3.2 Pela linha de comando
 
@@ -121,7 +121,7 @@ journalctl -u gpu-power-manager-persist.service -b
 
 No boot, o script:
 
-1. **aguarda o driver NVIDIA ficar disponível** (com timeout limitado) — os limites só são aplicados depois disso;
+1. **aguarda o driver NVIDIA ficar disponível** (com timeout limitado), e só então aplica os limites;
 2. lê o perfil;
 3. **revalida cada valor contra os limites reais** da GPU correspondente;
 4. aplica com `nvidia-smi -i <uuid> -pl <watts>`;
